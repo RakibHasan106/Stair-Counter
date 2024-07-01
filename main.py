@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 
 from tkinter import filedialog
+from tkinter import messagebox
 
 from matplotlib import pyplot as plt
 
@@ -19,7 +20,7 @@ from EdgeDetection import *
 def on_button1_click():
     file_path = filedialog.askopenfilename(
         title="Select an Image File",
-        initialdir='/',
+        initialdir='D:/Study/4-1/Lab/Image Lab/Project/Stair-Counter',
         filetypes=[("Image Files", "*.png *.jpg *.jpeg *.bmp *.svg")]
     )
 
@@ -31,6 +32,8 @@ def on_button1_click():
         # print(img)
 
         # print(file_path)
+        # root.withdraw()
+        
         img = cv2.imread(file_path, cv2.IMREAD_GRAYSCALE)
         print(img)
 
@@ -42,7 +45,7 @@ def on_button1_click():
         img_tk = ImageTk.PhotoImage(pil_img) # Creating a ImageTk from a pil_image which is compatible with tkinter
         
         image_viewer = tk.Toplevel(root)
-        image_viewer.title("Image Viewer")
+        image_viewer.title("Input Image")
         
         image_viewer.geometry(f"{img.shape[0]+100}x{img.shape[1]+100}")
                 
@@ -50,9 +53,7 @@ def on_button1_click():
         img_label = ttk.Label(image_viewer, image=img_tk)
         img_label.image = img_tk
         img_label.pack(padx=10, pady=10)
-        
-        
-        
+                
         
         EdgeDetector = EdgeDetection(img,sigma=.7,kernelSize=5)
         
@@ -70,9 +71,11 @@ def on_button1_click():
         edged_label.image = edged_img_tk
         edged_label.pack(padx=10, pady=10)
         
+        # edges = np.where(edged>0)
+        
         LineDetector = LineDetection(edged)
         
-        output = LineDetector.lineDetection(file_path)
+        output,line_number = LineDetector.lineDetection(file_path)
         
         output_pil_image = Image.fromarray(output)
         output_img_tk = ImageTk.PhotoImage(output_pil_image)
@@ -86,14 +89,8 @@ def on_button1_click():
         output_label.image = output_img_tk
         output_label.pack(padx=10,pady=10)
         
+        # messagebox.showinfo("Information", f"Number of steps Detected = {line_number}")
         
-        
-        
-        
-        
-        
-
-
 
 # Function to be called when button2 is clicked
 def on_button2_click():
@@ -103,7 +100,7 @@ def on_button2_click():
 # Create the main window
 root = tk.Tk()
 root.title("Stair Counter")
-root.geometry("300x200")
+root.geometry("500x400")
 root.configure(bg='white')
 
 # Define a style for the buttons
