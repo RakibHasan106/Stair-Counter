@@ -85,11 +85,11 @@ class LineDetection:
                         for ln in lines:
                             pt3,pt4 = ln
                             distance = self.distance_between_lines(pt1,pt2,pt3,pt4)
-                            if(distance<31):
+                            if(distance<25):
                                 # print("distance: "+str(distance))
                                 break
                                 
-                    if(distance>31):     
+                    if(distance>25):     
                         lines.append([pt1,pt2])
                         cv2.line(new_img,pt1=pt1, pt2=pt2, color=[0,255,0], thickness=2)
                         i += 1
